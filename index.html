@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kantin Pintar - Rekomendasi Menu Kantin</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box;font-family:'Segoe UI',system-ui,Arial,sans-serif}
+  body{background:linear-gradient(180deg,#dbeafe 0%,#bfdbfe 50%,#93c5fd 100%);min-height:100vh;display:flex;justify-content:center;padding:20px;position:relative;overflow-x:hidden}
+  /* STIKER MAKANAN BERGERAK */
+  .stiker{position:fixed;font-size:44px;animation:melayang 4.5s ease-in-out infinite;z-index:1;filter:drop-shadow(0 6px 6px rgba(30,64,175,.25));pointer-events:none}
+  .s1{top:4%;left:4%}.s2{top:7%;right:5%;animation-delay:.7s}.s3{bottom:6%;left:6%;animation-delay:1.2s}.s4{bottom:8%;right:5%;animation-delay:.4s}.s5{top:42%;left:1%;animation-delay:1.6s}.s6{top:42%;right:1%;animation-delay:.2s}.s7{top:20%;left:1%;animation-delay:1s}.s8{top:20%;right:1%;animation-delay:1.4s}
+  @keyframes melayang{0%,100%{transform:translateY(0) rotate(-8deg)}50%{transform:translateY(-18px) rotate(8deg)}}
+  /* CARD UTAMA */
+  .card{background:rgba(255,255,255,.92);backdrop-filter:blur(10px);width:100%;max-width:580px;padding:28px 22px;border-radius:28px;border:2px solid #fff;box-shadow:0 20px 40px rgba(37,99,235,.25);position:relative;z-index:2;height:fit-content;text-align:center}
+  .logo{font-size:62px;animation:melayang 3s infinite}
+  h1{color:#1e40af;font-size:27px;letter-spacing:-.5px}
+  h1 span{color:#2563eb}
+  p.sub{color:#64748b;font-size:14px;line-height:1.6;margin:8px 0 4px}
+  /* TOMBOL IYA / TIDAK */
+  .btn-area{margin-top:20px;min-height:72px;display:flex;justify-content:center;gap:16px;align-items:center}
+  #btnIya{background:#2563eb;color:#fff;border:none;padding:15px 34px;font-size:18px;font-weight:800;border-radius:999px;cursor:pointer;box-shadow:0 7px 0 #1e3a8a,0 12px 20px rgba(37,99,235,.35);transition:.2s}
+  #btnIya:active{transform:translateY(5px);box-shadow:0 2px 0 #1e3a8a}
+  #btnTidak{background:#fff;color:#ef4444;border:2px solid #fecaca;padding:15px 30px;font-size:18px;font-weight:800;border-radius:999px;cursor:pointer;box-shadow:0 6px 0 #fecaca;position:relative}
+  /* AREA SETELAH IYA */
+  #areaMenu{display:none;margin-top:10px;text-align:left;animation:pop .4s ease}
+  @keyframes pop{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+  #pesanPositif{display:none;background:linear-gradient(135deg,#dbeafe,#eff6ff);border:2px dashed #2563eb;padding:15px;border-radius:18px;color:#1e40af;font-weight:700;line-height:1.6;text-align:center;margin-bottom:14px;font-size:14px}
+  label{font-weight:800;color:#1e40af;font-size:13px;display:block;margin:15px 0 7px;letter-spacing:.3px}
+  .tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+  .tabs button{padding:10px 16px;border-radius:999px;border:2px solid #bfdbfe;background:#eff6ff;color:#1e40af;font-weight:800;cursor:pointer;font-size:13px;transition:.2s}
+  .tabs button.active{background:#2563eb;color:#fff;border-color:#2563eb;transform:scale(1.06);box-shadow:0 5px 12px rgba(37,99,235,.35)}
+  /* ALERGI - CHECKBOX */
+  .alergi-box{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+  .alergi-box label{margin:0;font-weight:700;font-size:13px;background:#eff6ff;border:2px solid #bfdbfe;color:#1e40af;padding:9px 13px;border-radius:999px;cursor:pointer;display:flex;align-items:center;gap:6px}
+  .alergi-box label:has(input:checked){background:#2563eb;color:#fff;border-color:#2563eb}
+  .alergi-box input{accent-color:#2563eb}
+  .budget-wrap{position:relative}
+  .budget-wrap span{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#2563eb;font-weight:800}
+  input[type=number]{width:100%;padding:13px 13px 13px 42px;border:2px solid #bfdbfe;border-radius:14px;background:#eff6ff;outline:none;color:#1e40af;font-weight:800;font-size:16px}
+  input[type=number]:focus{border-color:#2563eb;background:#fff}
+  input[type=range]{width:100%;accent-color:#2563eb;margin-top:10px}
+  .range-label{display:flex;justify-content:space-between;font-size:11px;color:#64748b;font-weight:700;margin-top:2px}
+  #btnCari{width:100%;margin-top:18px;padding:15px;border:none;border-radius:16px;background:linear-gradient(135deg,#2563eb,#1d4ed8);color:#fff;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 6px 0 #1e3a8a,0 10px 20px rgba(37,99,235,.3)}
+  #btnCari:active{transform:translateY(4px);box-shadow:0 2px 0 #1e3a8a}
+  #hasil{margin-top:16px}
+  .item{background:#fff;border:2px solid #dbeafe;border-radius:18px;padding:13px;margin-bottom:11px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+  .item b{color:#1e40af;font-size:15px}
+  .item span{font-size:12px;color:#64748b}
+  .harga{background:#2563eb;color:#fff;padding:7px 12px;border-radius:999px;font-weight:800;font-size:13px;white-space:nowrap}
+  .badge{background:#dcfce7;color:#166534;padding:2px 8px;border-radius:999px;font-size:11px;font-weight:800}
+  .aman{background:#eff6ff;color:#2563eb;padding:2px 7px;border-radius:999px;font-size:11px;font-weight:700}
+  .footer{text-align:center;font-size:11px;color:#94a3b8;margin-top:14px}
+  .flow{font-size:11px;color:#64748b;background:#f8fafc;border:1px dashed #bfdbfe;padding:8px 10px;border-radius:10px;text-align:center;margin-top:12px;line-height:1.6}
+</style>
+</head>
+<body>
+
+  <!-- STIKER BERGERAK -->
+  <div class="stiker s1">🍔</div>
+  <div class="stiker s2">🥤</div>
+  <div class="stiker s3">🍩</div>
+  <div class="stiker s4">🍗</div>
+  <div class="stiker s5">🍟</div>
+  <div class="stiker s6">🍜</div>
+  <div class="stiker s7">🍌</div>
+  <div class="stiker s8">🧋</div>
+
+  <div class="card">
+    <div class="logo">🏫🍔</div>
+    <h1>Kantin <span>Pintar</span></h1>
+    <p class="sub" id="pertanyaan">Bingung mau jajan apa hari ini?<br><b style="color:#1e40af">Mau ku carikan menu kantin terenak buat kamu?</b></p>
+
+    <div class="btn-area" id="btnArea">
+      <button id="btnIya">IYA ✅</button>
+      <button id="btnTidak">TIDAK ❌</button>
+    </div>
+
+    <div id="areaMenu">
+      <div id="pesanPositif"></div>
+
+      <label>🍽️ 1. PILIH KATEGORI MENU</label>
+      <div class="tabs" id="tabsKategori">
+        <button type="button" class="active" data-kat="semua">Semua 🍽️</button>
+        <button type="button" data-kat="makanan">Makanan 🍛</button>
+        <button type="button" data-kat="minuman">Minuman 🥤</button>
+        <button type="button" data-kat="gorengan">Gorengan 🍩</button>
+      </div>
+
+      <label>💰 2. INPUT ANGGARAN (BUDGET)</label>
+      <div class="budget-wrap"><span>Rp</span><input type="number" id="budget" value="10000" min="0"></div>
+      <input type="range" id="slider" min="2000" max="20000" step="1000" value="10000">
+      <div class="range-label"><span>Rp 2.000</span><span id="budgetLabel">Rp 10.000</span><span>Rp 20.000</span></div>
+
+      <label>😋 3. INPUT PREFERENSI / SELERA</label>
+      <div class="tabs" id="tabsPref">
+        <button type="button" class="active" data-pref="semua">Semua</button>
+        <button type="button" data-pref="kenyang">Kenyang 🍚</button>
+        <button type="button" data-pref="pedas">Pedas 🌶️</button>
+        <button type="button" data-pref="manis">Manis 🍰</button>
+        <button type="button" data-pref="segar">Segar 🥤</button>
+        <button type="button" data-pref="sehat">Sehat 🥗</button>
+      </div>
+
+      <label>⚠️ 4. INPUT ALERGI <span style="color:#64748b;font-weight:600">(bisa pilih lebih dari 1)</span></label>
+      <div class="alergi-box" id="alergiBox">
+        <label><input type="checkbox" value="tidak_ada" checked> ✅ Tidak Ada Alergi</label>
+        <label><input type="checkbox" value="kacang"> 🥜 Kacang</label>
+        <label><input type="checkbox" value="seafood"> 🦐 Seafood / Udang</label>
+        <label><input type="checkbox" value="susu"> 🥛 Susu / Lactose</label>
+        <label><input type="checkbox" value="pedas"> 🌶️ Pedas</label>
+        <label><input type="checkbox" value="telur"> 🥚 Telur</label>
+      </div>
+
+      <button id="btnCari">🔍 CARI REKOMENDASI</button>
+      <div id="hasil"></div>
+      <div class="flow">ALUR: MULAI → IYA → Anggaran → Preferensi → Alergi → Saring Anggaran → Saring Preferensi & Alergi → Cek Sisa Menu → Urutkan Harga → Rekomendasi → SELESAI</div>
+    </div>
+
+    <div class="footer">Tugas Informatika • Tema Biru 💙 • Github Pages</div>
+  </div>
+
+<script>
+  // ===== JAVASCRIPT - FLOWCHART =====
+  const btnIya = document.getElementById('btnIya');
+  const btnTidak = document.getElementById('btnTidak');
+  const areaMenu = document.getElementById('areaMenu');
+  const pesanPositif = document.getElementById('pesanPositif');
+  const pertanyaan = document.getElementById('pertanyaan');
+  const budgetInput = document.getElementById('budget');
+  const slider = document.getElementById('slider');
+  const budgetLabel = document.getElementById('budgetLabel');
+  const hasilDiv = document.getElementById('hasil');
+
+  // DATA MENU + ALERGI
+  const menus = [
+    { nama: "Nasi Goreng", harga: 10000, kategori: "makanan", pref: "kenyang", emoji: "🍛", desc: "Porsi besar, bikin kenyang", alergi: ["telur"] },
+    { nama: "Mie Goreng Pedas", harga: 8000, kategori: "makanan", pref: "pedas", emoji: "🍜", desc: "Pedas nampol, gurih", alergi: ["telur","pedas"] },
+    { nama: "Ayam Geprek + Nasi", harga: 12000, kategori: "makanan", pref: "pedas", emoji: "🍗", desc: "Crispy + sambal pedas", alergi: ["pedas"] },
+    { nama: "Nasi Kuning", harga: 7000, kategori: "makanan", pref: "kenyang", emoji: "🍚", desc: "Murah, enak, kenyang", alergi: [] },
+    { nama: "Bakso Kuah", harga: 9000, kategori: "makanan", pref: "kenyang", emoji: "🍲", desc: "Kuah hangat, segar", alergi: [] },
+    { nama: "Es Teh Manis", harga: 3000, kategori: "minuman", pref: "segar", emoji: "🧋", desc: "Segar, dingin, manis", alergi: [] },
+    { nama: "Es Jeruk", harga: 5000, kategori: "minuman", pref: "segar", emoji: "🍊", desc: "Vitamin C, segar", alergi: [] },
+    { nama: "Jus Alpukat", harga: 10000, kategori: "minuman", pref: "sehat", emoji: "🥑", desc: "Sehat, creamy", alergi: ["susu"] },
+    { nama: "Es Coklat", harga: 7000, kategori: "minuman", pref: "manis", emoji: "🍫", desc: "Manis, coklat banget", alergi: ["susu"] },
+    { nama: "Air Mineral", harga: 3000, kategori: "minuman", pref: "sehat", emoji: "💧", desc: "Sehat, murah", alergi: [] },
+    { nama: "Pisang Goreng", harga: 5000, kategori: "gorengan", pref: "manis", emoji: "🍌", desc: "Hangat, manis, crispy", alergi: [] },
+    { nama: "Tahu Isi", harga: 2000, kategori: "gorengan", pref: "pedas", emoji: "🧆", desc: "Pedas, gurih, murah", alergi: ["pedas"] },
+    { nama: "Tempe Mendoan", harga: 2000, kategori: "gorengan", pref: "kenyang", emoji: "🍘", desc: "Gurih, hangat", alergi: ["kacang"] },
+    { nama: "Risol Mayo", harga: 3000, kategori: "gorengan", pref: "manis", emoji: "🥐", desc: "Creamy, gurih manis", alergi: ["telur","susu"] },
+    { nama: "Donat", harga: 5000, kategori: "gorengan", pref: "manis", emoji: "🍩", desc: "Manis, lembut", alergi: ["telur","susu"] },
+    { nama: "Bakwan Jagung", harga: 3000, kategori: "gorengan", pref: "kenyang", emoji: "🌽", desc: "Gurih, renyah", alergi: ["telur"] }
+  ];
+
+  let kategoriDipilih = "semua";
+  let prefDipilih = "semua";
+
+  function formatRp(n){ return "Rp " + n.toLocaleString("id-ID"); }
+
+  // LANGKAH 2: TOMBOL TIDAK = KABUR TERUS
+  function pindahTombol(){
+    btnTidak.style.position = 'fixed';
+    const maxX = window.innerWidth - 140;
+    const maxY = window.innerHeight - 70;
+    btnTidak.style.left = Math.floor(Math.random() * maxX) + 'px';
+    btnTidak.style.top = Math.floor(Math.random() * maxY) + 'px';
+    btnTidak.style.zIndex = '99';
+    let ukuran = parseFloat(window.getComputedStyle(btnIya).fontSize);
+    if(ukuran < 28){ btnIya.style.fontSize = (ukuran + 2) + 'px'; }
+  }
+  btnTidak.addEventListener('mouseover', pindahTombol);
+  btnTidak.addEventListener('click', pindahTombol);
+  btnTidak.addEventListener('touchstart', pindahTombol);
+
+  // LANGKAH 2: TOMBOL IYA = PESAN POSITIF + LANJUT INPUT
+  btnIya.addEventListener('click', function(){
+    btnTidak.style.display = 'none';
+    pertanyaan.innerHTML = "Yeay! Pilihan tepat! 🎉";
+    pesanPositif.style.display = 'block';
+    pesanPositif.innerHTML = '🎉 KAMU ANAK PINTAR, HEMAT & PEDULI KESEHATAN! 🎉<br>Kamu sudah memilih menu sesuai budget, selera, dan alergi. Itu tandanya kamu bijak mengatur uang jajan dan menjaga tubuhmu! 💙🍔';
+    areaMenu.style.display = 'block';
+    cariMenu();
+  });
+
+  // SYNC BUDGET INPUT + SLIDER
+  budgetInput.addEventListener('input', function(){
+    let val = parseInt(budgetInput.value) || 0;
+    budgetLabel.textContent = formatRp(val);
+    if(val >= 2000 && val <= 20000) slider.value = val;
+    cariMenu();
+  });
+  slider.addEventListener('input', function(){
+    budgetInput.value = slider.value;
+    budgetLabel.textContent = formatRp(parseInt(slider.value));
+    cariMenu();
+  });
+
+  // KATEGORI
+  document.querySelectorAll('#tabsKategori button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#tabsKategori button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      kategoriDipilih = btn.getAttribute('data-kat');
+      cariMenu();
+    });
+  });
+
+  // PREFERENSI
+  document.querySelectorAll('#tabsPref button').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('#tabsPref button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      prefDipilih = btn.getAttribute('data-pref');
+      cariMenu();
+    });
+  });
+
+  // ALERGI: Jika pilih "Tidak Ada", hapus alergi lain. Jika pilih alergi lain, hapus "Tidak Ada"
+  document.querySelectorAll('#alergiBox input').forEach(function(cb){
+    cb.addEventListener('change', function(){
+      let semua = document.querySelectorAll('#alergiBox input');
+      if(cb.value === 'tidak_ada' && cb.checked){
+        semua.forEach(c => { if(c.value !== 'tidak_ada') c.checked = false; });
+      } else if(cb.value !== 'tidak_ada' && cb.checked){
+        document.querySelector('#alergiBox input[value="tidak_ada"]').checked = false;
+      }
+      // Jika semua tidak dicentang, balik ke Tidak Ada
+      let adaYangCentang = Array.from(semua).some(c => c.checked);
+      if(!adaYangCentang){ document.querySelector('#alergiBox input[value="tidak_ada"]').checked = true; }
+      cariMenu();
+    });
+  });
+
+  document.getElementById('btnCari').addEventListener('click', cariMenu);
+
+  // FUNGSI UTAMA - FLOWCHART LANGKAH 6-11
+  function cariMenu(){
+    const budget = parseInt(budgetInput.value) || 0;
+    if(budget <= 0){
+      hasilDiv.innerHTML = '<p style="text-align:center;color:#94a3b8">Masukkan budget dulu ya!</p>';
+      return;
+    }
+
+    // Ambil alergi yang dipilih (buang "tidak_ada")
+    let alergiDipilih = Array.from(document.querySelectorAll('#alergiBox input:checked')).map(c => c.value).filter(v => v !== 'tidak_ada');
+
+    // LANGKAH 6: SARING BERDASARKAN ANGGARAN
+    let hasil = menus.filter(function(m){ return m.harga <= budget; });
+
+    // LANGKAH 7: SARING BERDASARKAN PREFERENSI + ALERGI + KATEGORI
+    hasil = hasil.filter(function(m){
+      if(kategoriDipilih !== "semua" && m.kategori !== kategoriDipilih) return false;
+      if(prefDipilih !== "semua" && m.pref !== prefDipilih) return false;
+      // Jika menu punya alergi yang dipilih user, BUANG menu itu
+      for(let a of alergiDipilih){
+        if(m.alergi.includes(a)) return false;
+      }
+      return true;
+    });
+
+    // LANGKAH 8: APAKAH ADA MENU YANG TERSISA?
+    if(hasil.length === 0){
+      hasilDiv.innerHTML = '<p style="text-align:center;color:#ef4444;font-weight:700;padding:16px;line-height:1.6">😢 Tidak ada rekomendasi yang cocok.<br>Coba naikkan budget atau ubah preferensi / alergi kamu.</p>';
+      return;
+    }
+
+    // LANGKAH 9: URUTKAN BERDASARKAN HARGA (tertinggi -> terendah)
+    hasil.sort(function(a,b){ return b.harga - a.harga; });
+
+    // LANGKAH 10: OUTPUT REKOMENDASI
+    let html = '<b style="color:#1e40af">✅ Ketemu ' + hasil.length + ' menu aman untuk budget ' + formatRp(budget) + ':</b><br><br>';
+    hasil.forEach(function(m,i){
+      let sisa = budget - m.harga;
+      let badge = i===0 ? ' <span class="badge">⭐ PALING COCOK</span>' : '';
+      let alergiText = m.alergi.length === 0 ? 'Bebas Alergi' : 'Mengandung: ' + m.alergi.join(', ');
+      html += '<div class="item"><div><b>' + m.emoji + ' ' + m.nama + '</b>' + badge + '<br><span>' + m.desc + ' • Sisa: ' + formatRp(sisa) + '</span><br><span class="aman">✅ ' + alergiText + '</span></div><div class="harga">' + formatRp(m.harga) + '</div></div>';
+    });
+    hasilDiv.innerHTML = html;
+    // LANGKAH 11: SELESAI
+  }
+</script>
+</body>
+  </html>
